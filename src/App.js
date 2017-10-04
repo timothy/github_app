@@ -8,8 +8,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-
-                <Card/>
+                <CardList/>
             </div>
         );
     }
@@ -22,7 +21,7 @@ const Card = (props) => {
         <div>
 
             <img src={userPic} alt="logo"/>
-            <div style={{display: 'inline-block', mardinLeft: 10}}>
+            <div style={{display: 'inline-block', marginLeft: 10}}>
                 <div style={{fontSize: '1.25em', fontWeight: 'bold'}}>Name here</div>
                 <div>Company name Here</div>
             </div>
@@ -33,7 +32,7 @@ const Card = (props) => {
 const CardList = (props) => {
     return (
         <div>
-
+            <Card/>
         </div>
     )
 };
