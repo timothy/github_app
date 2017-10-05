@@ -1,29 +1,41 @@
 import React, {Component} from 'react';
 //import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 class App extends Component {
-
+    state = {
+        cards: [
+            {
+                name: "Timothy",
+                avatar_url: "https://avatars3.githubusercontent.com/u/7410132?v=4",
+                company: "Liberty"
+            },
+            {
+                name: "Matthew Mohrman",
+                avatar_url: "https://avatars3.githubusercontent.com/u/2709?v=4",
+                company: "Slalom"
+            }
+        ]
+    };
 
     render() {
         return (
             <div className="App">
-                <CardList/>
+                <Form/>
+                <CardList cards={this.state.cards}/>
             </div>
         );
     }
 }
 
 const Card = (props) => {
-    let userPic = "http://placehold.it/75";
-
     return (
         <div>
-
-            <img src={userPic} alt="logo"/>
+            <img width="75" src={props.avatar_url} alt="logo"/>
             <div style={{display: 'inline-block', marginLeft: 10}}>
-                <div style={{fontSize: '1.25em', fontWeight: 'bold'}}>Name here</div>
-                <div>Company name Here</div>
+                <div style={{fontSize: '1.25em', fontWeight: 'bold'}}>{props.name}</div>
+                <div>{props.company}</div>
             </div>
         </div>
     )
@@ -32,9 +44,38 @@ const Card = (props) => {
 const CardList = (props) => {
     return (
         <div>
-            <Card/>
+            {props.cards.map(card => <Card {...card}/>)}
         </div>
     )
 };
+
+
+class Form extends Component {
+    state = {userName: ''};
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(this.state.userName, "Test from handle Submit");
+        // ajax - (fetch or axios library)
+        axios.get(`https://api.github.com/users/${this.state.userName}`).then(response => {
+            console.log(response);
+        });
+    };
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <input type="text"
+                       value={this.state.userName}
+                       onChange={(event) => this.setState({userName: event.target.value})}
+                       /*ref={(input) => this.userNameInput = input}*/
+                       placeholder="Github username" required
+                />
+                <button type="submit">Add Card</button>
+            </form>
+        );
+    }
+}
+
 
 export default App;
