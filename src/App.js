@@ -4,25 +4,32 @@ import './App.css';
 import axios from 'axios';
 
 class App extends Component {
-    state = {
-        cards: [
-            {
-                name: "Timothy",
-                avatar_url: "https://avatars3.githubusercontent.com/u/7410132?v=4",
-                company: "Liberty"
-            },
-            {
-                name: "Matthew Mohrman",
-                avatar_url: "https://avatars3.githubusercontent.com/u/2709?v=4",
-                company: "Slalom"
-            }
-        ]
+
+    constructor(props){
+        super(props);
+        this.state = {
+            cards: [
+                {//sample data
+                    name: "Timothy",
+                    avatar_url: "https://avatars3.githubusercontent.com/u/7410132?v=4",
+                    bio: "I love to program! I like hiking and outdoor activities. I am currently a mobile software developer and I really enjoy what I do."
+                }
+            ]
+        };
+    }
+
+
+    addNewCard = (cardInfo) => {
+        console.log(cardInfo, "cardInfo!!!");
+        this.setState({
+            cards: [...this.state.cards, cardInfo]
+        });
     };
 
     render() {
         return (
             <div className="App">
-                <Form/>
+                <Form onSubmit={this.addNewCard}/>
                 <CardList cards={this.state.cards}/>
             </div>
         );
@@ -35,7 +42,7 @@ const Card = (props) => {
             <img width="75" src={props.avatar_url} alt="logo"/>
             <div style={{display: 'inline-block', marginLeft: 10}}>
                 <div style={{fontSize: '1.25em', fontWeight: 'bold'}}>{props.name}</div>
-                <div>{props.company}</div>
+                <div>bio: {props.bio}</div>
             </div>
         </div>
     )
@@ -58,7 +65,7 @@ class Form extends Component {
         console.log(this.state.userName, "Test from handle Submit");
         // ajax - (fetch or axios library)
         axios.get(`https://api.github.com/users/${this.state.userName}`).then(response => {
-            console.log(response);
+            this.props.onSubmit(response.data);
         });
     };
 
@@ -68,7 +75,7 @@ class Form extends Component {
                 <input type="text"
                        value={this.state.userName}
                        onChange={(event) => this.setState({userName: event.target.value})}
-                       /*ref={(input) => this.userNameInput = input}*/
+                    /*ref={(input) => this.userNameInput = input}*/
                        placeholder="Github username" required
                 />
                 <button type="submit">Add Card</button>
